@@ -1,0 +1,31 @@
+services:
+  mongo-db:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+  
+  parse-server:
+    image: parseplatform/parse-server
+    ports:
+      - "1337:1337"
+    environment:
+      - PARSE_SERVER_APPLICATION_ID=SECRET_APP_ID
+      - PARSE_SERVER_MASTER_KEY=SECRET_MASTER_KEY
+      - PARSE_SERVER_DATABASE_URI=mongodb://admin:admin@mongo/parse_server?authSource=admin
+    links:
+      - mongo-db:mongo
+
+  parse-dashboard:
+    image: parseplatform/parse-dashboard
+    ports:
+      - "4040:4040"
+    command: --dev
+    environment:
+      - PARSE_DASHBOARD_SERVER_URL=http://localhost:1337/parse
+      - PARSE_DASHBOARD_APP_ID=SECRET_APP_ID
+      - PARSE_DASHBOARD_MASTER_KEY=SECRET_MASTER_KEY
+      - PARSE_DASHBOARD_APP_NAME=TestApp
+      - PARSE_DASHBOARD_USER_ID=admin
+      - PARSE_DASHBOARD_USER_PASSWORD=admin
+
