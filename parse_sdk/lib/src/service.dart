@@ -1,7 +1,6 @@
 import 'parse_client.dart';
 
-class Service {
-  final ParseClient client;
-
+abstract class Service {
   const Service(this.client);
+  final ParseClient client;
 }

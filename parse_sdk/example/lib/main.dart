@@ -3,13 +3,14 @@ import 'package:parse_sdk/parse_sdk.dart';
 
 import 'home_page.dart';
 
-void main() {
-  final parseClient = ParseClient(
-    ParseOptions(
-      serverUrl: 'http://localhost:1337/parse',
+final parseClient = ParseClient(
+  ParseOptions(
+      serverUrl: 'http://192.168.1.89:1337/parse',
       appId: 'SECRET_APP_ID',
-    ),
-  );
+      masterKey: 'SECRET_MASTER_KEY'),
+);
+
+void main() {
   runApp(const MyApp());
 }
 
