@@ -20,12 +20,12 @@ class ParseObject extends Service {
   }
 
   /// Get a object with a [objectId] from [className]
-  Future getObject({
+  Future get({
     required String className,
     required String objectId,
   }) async {
-    final res = await client.get(client.uri('/classes/$className/$objectId'));
-    log(res.body);
+    final res = await client
+        .get(client.buildUri(path: '/classes/$className/$objectId'));
     return res.body;
   }
 
@@ -44,8 +44,7 @@ class ParseObject extends Service {
     required Map<String, dynamic> data,
   }) async {
     final res = await client.post(
-      client.uri('/classes/$className'),
-      // body: {'ram': '6gb', 'cpu': 'ryzen', 'disk': '2tb'},
+      client.buildUri(path: '/classes/$className'),
       body: data,
     );
     log(res.body);
@@ -64,13 +63,13 @@ class ParseQuery {
 
   /// Query objects from a [_className] with provided Query Constraints
   Future get() async {
-    final res =
-        await _client.get(_client.uri('/classes/$_className'), headers: {
-      // 'where': jsonEncode(_whereEqualToQuery),
-      'where': "{'ram': '42'}",
-    });
-    log(res.body);
-
+    final res = await _client.get(
+      _client.buildUri(
+        path: '/classes/$_className',
+        // query: 'where={"ram":"32", "ram": "2"}',
+        query: 'where=$_whereEqualToQuery',
+      ),
+    );
     return res.body;
   }
 

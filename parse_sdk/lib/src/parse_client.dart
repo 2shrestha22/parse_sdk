@@ -18,16 +18,20 @@ class ParseClient extends http.BaseClient {
     _instance = ParseClient._(options, client);
   }
 
-  /// Returns [Uri] concatenatinating serverUrl and [endPoint]
+  /// Returns [Uri] concatenatinating serverUrl and [path]
   ///
-  /// [endPoint] must start with `/`
+  /// [path] must start with `/`
   ///
   /// e.g. `/api/account`
-  Uri uri(String endPoint) {
+  Uri buildUri({
+    required String path,
+    String? query,
+  }) {
     final baseUrl = (_options.serverUrl.endsWith('/'))
         ? _options.serverUrl.substring(0, _options.serverUrl.length - 1)
         : _options.serverUrl;
-    return Uri.parse("$baseUrl$endPoint");
+
+    return Uri.parse("$baseUrl$path").replace(query: query);
   }
 
   @override
