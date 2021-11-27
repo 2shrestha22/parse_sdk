@@ -5,10 +5,19 @@ import 'package:parse_sdk/src/parse_client.dart';
 import 'package:parse_sdk/src/service.dart';
 
 class ParseObject extends Service {
-  ParseObject(ParseClient client) : super(client);
+  ParseObject._() : super(ParseClient.instance);
 
-  // late ParseQuery _query;
-  // set query(String className) => _query = ParseQuery(className);
+  static ParseObject? _instance;
+
+  /// Returns a singleton
+  factory ParseObject() {
+    if (_instance != null) {
+      return _instance!;
+    } else {
+      _instance = ParseObject._();
+    }
+    return _instance!;
+  }
 
   /// Get a object with a [objectId] from [className]
   Future getObject({
@@ -51,28 +60,29 @@ class ParseQuery {
   /// Allows to make complex queries on ParseServer
   ParseQuery(this._className, this._client);
 
-  Map<String, String>? whereEqualToQuery;
+  Map<String, String>? _whereEqualToQuery;
 
   /// Query objects from a [_className] with provided Query Constraints
   Future get() async {
     final res =
         await _client.get(_client.uri('/classes/$_className'), headers: {
-      'where': jsonEncode(whereEqualToQuery),
+      // 'where': jsonEncode(_whereEqualToQuery),
+      'where': "{'ram': '42'}",
     });
     log(res.body);
+
     return res.body;
   }
 
   /// Query
   ParseQuery whereEqualTo<T>(String columnName, Object value) {
-    whereEqualToQuery?.putIfAbsent(columnName, () => jsonEncode(value));
+    _whereEqualToQuery?.putIfAbsent(columnName, () => jsonEncode(value));
     return this;
   }
 }
 
-
 // query parameters
-// where  
+// where
 // order 	Specify a field to sort by
 // limit 	Limit the number of objects returned by the query
 // skip 	Use with limit to paginate through results

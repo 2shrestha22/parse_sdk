@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:example/main.dart';
 import 'package:example/models/pc.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_sdk/parse_sdk.dart';
@@ -19,10 +18,22 @@ class _HomePageState extends State<HomePage> {
   final diskTextEditingController = TextEditingController();
 
   Future<List<PC>> getPCs() async {
-    final res = await ParseObject(parseClient)
+    final res = await ParseObject()
         .query(
           className: 'PC',
         )
+        .get();
+    return (jsonDecode(res)['results'] as List)
+        .map((e) => PC.fromMap(e))
+        .toList();
+  }
+
+  Future<List<PC>> queryPCs() async {
+    final res = await ParseObject()
+        .query(
+          className: 'PC',
+        )
+        .whereEqualTo('ram', 42)
         .get();
     return (jsonDecode(res)['results'] as List)
         .map((e) => PC.fromMap(e))
@@ -68,7 +79,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                   TextButton(
                     onPressed: () {
-                      ParseObject(parseClient)
+                      print(identical(ParseObject(), ParseObject()));
+                      ParseObject()
                           .createObject(
                         className: 'PC',
                         data: PC(
@@ -89,6 +101,27 @@ class _HomePageState extends State<HomePage> {
             // List all objects from PC class
             FutureBuilder<List<PC>>(
               future: getPCs(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Column(
+                    children: snapshot.data!
+                        .map((e) => Row(
+                              children: [
+                                Expanded(child: Text('CPU ${e.cpu} %')),
+                                Expanded(child: Text('RAM ${e.ram} %')),
+                                Expanded(child: Text('Disk ${e.disk} %')),
+                              ],
+                            ))
+                        .toList(),
+                  );
+                }
+                return const CircularProgressIndicator();
+              },
+            ),
+            // where query
+            const Text('Query PCs'),
+            FutureBuilder<List<PC>>(
+              future: queryPCs(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Column(

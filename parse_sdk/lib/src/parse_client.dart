@@ -7,8 +7,16 @@ class ParseClient extends http.BaseClient {
   /// Setup config for Parse
   final ParseOptions _options;
 
-  ParseClient(this._options, [http.Client? inner])
+  // Private constructor
+  ParseClient._(this._options, [http.Client? inner])
       : _inner = inner ?? http.Client();
+
+  static late ParseClient _instance;
+
+  /// Initialize [ParseClient] with [ParseOptions] and optional [http.Client]
+  static void init(ParseOptions options, [http.Client? client]) {
+    _instance = ParseClient._(options, client);
+  }
 
   /// Returns [Uri] concatenatinating serverUrl and [endPoint]
   ///
@@ -45,6 +53,12 @@ class ParseClient extends http.BaseClient {
     }
     super.close();
   }
+
+  /// Instance of a [ParseClient]
+  ///
+  /// You need to initilize [ParseClient] with
+  /// `ParseClient.init(options)` before using this.
+  static ParseClient get instance => _instance;
 }
 
 class ParseOptions {
