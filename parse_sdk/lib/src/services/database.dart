@@ -33,7 +33,7 @@ class ParseObject extends Service {
   /// constraints.
   ParseQuery query(String className) => ParseQuery(className, client);
 
-  Future createObject({
+  Future create({
     required String className,
     required Map<String, dynamic> data,
   }) async {

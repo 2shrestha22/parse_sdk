@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                       debugPrint(
                           identical(ParseObject(), ParseObject()).toString());
                       ParseObject()
-                          .createObject(
+                          .create(
                         className: 'PC',
                         data: PC(
                           cpu: cpuTextEditingController.text,
