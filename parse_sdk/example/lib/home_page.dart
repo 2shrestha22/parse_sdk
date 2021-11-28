@@ -33,8 +33,11 @@ class _HomePageState extends State<HomePage> {
         .query(
           className: 'PC',
         )
-        .whereEqualTo('disk', '94')
-        .whereNotEqualTo('ram', '60')
+        .where(
+          'ram',
+          isLessThan: '50',
+          isNotEqualTo: '35',
+        )
         .get();
     return (jsonDecode(res)['results'] as List)
         .map((e) => PC.fromMap(e))

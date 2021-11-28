@@ -37,6 +37,7 @@ class ParseQuery {
 
   String? _buildQueryString() {
     if (_whereQueries.isEmpty) return null;
+    // _whereQueries.removeWhere((key, value) => true);
     final encodedStr = jsonEncode(_whereQueries);
     final qStr = '''where=$encodedStr''';
     log('Query String starts.');
@@ -45,16 +46,70 @@ class ParseQuery {
     return qStr;
   }
 
+  ParseQuery where(
+    String column, {
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? isNotEqualTo,
+    List<Object>? isContainedIn,
+    List<Object>? isNotContainedIn,
+    Object? exists,
+    Object? select,
+    Object? dontSelect,
+    Object? all,
+    Object? regex,
+    Object? text,
+  }) {
+    assert(
+      isLessThan != null ||
+          isLessThanOrEqualTo != null ||
+          isGreaterThan != null ||
+          isGreaterThanOrEqualTo != null ||
+          isNotEqualTo != null ||
+          isContainedIn != null ||
+          isNotContainedIn != null ||
+          exists != null ||
+          select != null ||
+          dontSelect != null ||
+          all != null ||
+          regex != null ||
+          text != null,
+      "At least single where parameter is needed.",
+    );
+
+    _whereQueries.putIfAbsent(
+      column,
+      () => {
+        "\$lt": isLessThan,
+        "\$lte": isLessThanOrEqualTo,
+        "\$gt": isGreaterThan,
+        "\$gte": isGreaterThanOrEqualTo,
+        "\$ne": isNotEqualTo,
+        "\$in": isContainedIn,
+        "\$nin": isNotContainedIn,
+        "\$exists": exists,
+        "\$select": select,
+        "\$dontSelect": dontSelect,
+        "\$all": all,
+        "\$regex": regex,
+        "\$text": text
+      }..removeWhere((key, value) => value == null),
+    );
+    return this;
+  }
+
   /// Returns an object where the [String] column equals [value]
   ParseQuery whereEqualTo(String column, dynamic value) {
     _whereQueries.putIfAbsent(column, () => value);
     return this;
   }
 
-  ParseQuery whereNotEqualTo(String column, dynamic value) {
-    _whereQueries.putIfAbsent(column, () => {'\$ne': value});
-    return this;
-  }
+  // ParseQuery whereNotEqualTo(String column, dynamic value) {
+  //   _whereQueries.putIfAbsent(column, () => {'\$ne': value});
+  //   return this;
+  // }
 }
 
 
