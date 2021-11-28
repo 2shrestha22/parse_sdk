@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:parse_sdk/src/parse_client.dart';
@@ -47,6 +48,7 @@ class ParseQuery {
     final query = <String, dynamic>{};
     if (_whereQuery.isNotEmpty) {
       query['where'] = jsonEncode(_whereQuery);
+      log(_whereQuery.toString());
     }
     if (_order.isNotEmpty) {
       query['order'] = jsonEncode(_order);
@@ -69,6 +71,7 @@ class ParseQuery {
     if (query.isEmpty) {
       return null;
     } else {
+      log(query.toString());
       return query;
     }
   }
@@ -137,19 +140,19 @@ class ParseQuery {
     _whereQuery.putIfAbsent(
       column,
       () => {
-        "\$lt": isLessThan,
-        "\$lte": isLessThanOrEqualTo,
-        "\$gt": isGreaterThan,
-        "\$gte": isGreaterThanOrEqualTo,
-        "\$ne": isNotEqualTo,
-        "\$in": isContainedIn,
-        "\$nin": isNotContainedIn,
-        "\$exists": exists,
-        "\$select": select,
-        "\$dontSelect": dontSelect,
-        "\$all": all,
-        "\$regex": regex,
-        "\$text": text
+        "\$lt": _toParseObject(isLessThan),
+        "\$lte": _toParseObject(isLessThanOrEqualTo),
+        "\$gt": _toParseObject(isGreaterThan),
+        "\$gte": _toParseObject(isGreaterThanOrEqualTo),
+        "\$ne": _toParseObject(isNotEqualTo),
+        "\$in": _toParseObject(isContainedIn),
+        "\$nin": _toParseObject(isNotContainedIn),
+        "\$exists": _toParseObject(exists),
+        "\$select": _toParseObject(select),
+        "\$dontSelect": _toParseObject(dontSelect),
+        "\$all": _toParseObject(all),
+        "\$regex": _toParseObject(regex),
+        "\$text": _toParseObject(text)
       }..removeWhere((key, value) => value == null),
     );
     return this;
@@ -246,5 +249,12 @@ class ParseQuery {
   void _assertOrderClassName(String field) {
     assert(!_order.contains(field),
         'Duplicated order field name. Same field should not be sorted multiple times.');
+  }
+
+  Object? _toParseObject(Object? object) {
+    if (object is DateTime) {
+      return {"__type": "Date", "iso": object.toIso8601String()};
+    }
+    return object;
   }
 }

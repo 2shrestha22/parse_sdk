@@ -27,11 +27,11 @@ class _HomePageState extends State<HomePage> {
   Future<List<PC>> queryPCs() async {
     final res = await ParseObject()
         .query('PC')
-        .where('ram', isLessThanOrEqualTo: '50', isNotEqualTo: '35')
-        .orderByAscending('ram')
-        .limit(5)
-        .skip(5)
-        .excludeKeys(['ram']).get();
+        .where('createdAt', isLessThanOrEqualTo: DateTime(2021, 11, 28))
+        .where('cpu', isLessThanOrEqualTo: '60', isNotEqualTo: '35')
+        .orderByAscending('createdAt')
+        .limit(50)
+        .get();
     return (jsonDecode(res)['results'] as List)
         .map((e) => PC.fromMap(e))
         .toList();
@@ -110,6 +110,10 @@ class _HomePageState extends State<HomePage> {
                                 Expanded(child: Text('CPU ${e.cpu} %')),
                                 Expanded(child: Text('RAM ${e.ram} %')),
                                 Expanded(child: Text('Disk ${e.disk} %')),
+                                Expanded(
+                                    child: Text(e.createdAt
+                                        .toString()
+                                        .substring(0, 10))),
                               ],
                             ))
                         .toList(),
