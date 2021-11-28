@@ -12,18 +12,26 @@ class ParseQuery {
   /// Allows to make complex queries on ParseServer
   ParseQuery(this._className, this._client);
 
-  /// where query string
+  /// Query with different contraints
   final Map<String, dynamic> _whereQuery = <String, dynamic>{};
 
   /// order query string
   final List<String> _order = [];
 
-  /// limit 	Limit the number of objects returned by the query
-  // skip 	Use with limit to paginate through results
-  // keys 	Restrict the fields returned by the query
-  // excludeKeys 	Exclude specific fields from the returned query
-  // include 	Use on Pointer columns to return the full object
-  final Map<String, dynamic> _limiterQueries = <String, dynamic>{};
+  ///  	Limit the number of objects returned by the query
+  int? _limit;
+
+  /// Use with limit to paginate through results
+  int? _skip;
+
+  ///	Restrict the fields returned by the query
+  final List<String> _keys = [];
+
+  /// Exclude specific fields from the returned query
+  final List<String> _excludeKeys = [];
+
+  /// Use on Pointer columns to return the full object
+  String? _include;
 
   /// Query objects from a [_className] with provided Query Constraints
   Future get() async {
@@ -37,15 +45,29 @@ class ParseQuery {
   }
 
   Map<String, dynamic>? _getQueryParameters() {
-    final query = {
-      "where": jsonEncode(_whereQuery),
-      "order": jsonEncode(_order),
-    };
-    // remove null values from query
-    query.removeWhere((key, value) => jsonDecode(value)?.isEmpty ?? true);
+    final query = <String, dynamic>{};
+    if (_whereQuery.isNotEmpty) {
+      query['where'] = jsonEncode(_whereQuery);
+    }
+    if (_order.isNotEmpty) {
+      query['order'] = jsonEncode(_order);
+    }
+    if (_limit != null) {
+      query['limit'] = jsonEncode(_limit);
+    }
+    if (_skip != null) {
+      query['skip'] = jsonEncode(_skip);
+    }
+    if (_keys.isNotEmpty) {
+      query['keys'] = jsonEncode(_keys);
+    }
+    if (_excludeKeys.isNotEmpty) {
+      query['excludeKeys'] = jsonEncode(_excludeKeys);
+    }
+
+    // if all values are null that means query is `{}`, i.e. empty
+    // then return null
     if (query.isEmpty) {
-      // if all values are null that means query is `{}`, i.e. empty
-      // then return null
       return null;
     } else {
       return query;
@@ -139,21 +161,82 @@ class ParseQuery {
     return this;
   }
 
-  /// You can use the order (ascending) parameter to specify a field to sort by.
-  /// Prefixing with a negative sign reverses the order (descending).
+  /// You can use the order parameter to specify a field to sort by.
   ///
   /// You can sort by multiple fields by passing order a comma-separated list.
 
-  /// To retrieve documents that are ordered by `scores` in ascending order and
+  /// To retrieve documents that are ordered by `score` in ascending order and
   /// the `name` in descending order:
   /// ```dart
-  /// ParseObject().query('MyClassName').order(["scores", "-name"]);
+  /// ParseObject().query('MyClassName').orderByAscending('score').orderByDescending('name');
   /// ```
   ///
   /// This sorts the results in descending order by the `name` field if the
   /// previous sort keys (ascending order by the `score` field) are equal.
-  ParseQuery order(List<String> orderList) {
-    _order.addAll(orderList);
+  ParseQuery orderByAscending(String field) {
+    _assertOrderClassName(field);
+    _order.add(field);
     return this;
+  }
+
+  /// You can use the order parameter to specify a field to sort by.
+  ///
+  /// You can sort by multiple fields by passing order a comma-separated list.
+
+  /// To retrieve documents that are ordered by `score` in ascending order and
+  /// the `name` in descending order:
+  /// ```dart
+  /// ParseObject().query('MyClassName').orderByAscending('score').orderByDescending('name');
+  /// ```
+  ///
+  /// This sorts the results in descending order by the `name` field if the
+  /// previous sort keys (ascending order by the `score` field) are equal.
+  ParseQuery orderByDescending(String field) {
+    _assertOrderClassName(field);
+    _order.add('-$field');
+    return this;
+  }
+
+  /// You can use the `limit` and `skip` parameters for pagination.
+  /// `limit` defaults to 100. In the old Parse hosted backend,
+  /// the maximum limit was 1,000, but Parse Server removed that constraint.
+  ///
+  /// Thus, to retrieve 200 objects after skipping the first 400:
+  /// ```dart
+  /// ParseObject().query('MyClassName').limit(200).skip(400);
+  /// ```
+  ParseQuery limit(int limit) {
+    _limit = limit;
+    return this;
+  }
+
+  /// You can use the `limit` and `skip` parameters for pagination.
+  /// `limit` defaults to 100. In the old Parse hosted backend,
+  /// the maximum limit was 1,000, but Parse Server removed that constraint.
+  ///
+  /// Thus, to retrieve 200 objects after skipping the first 400:
+  /// ```dart
+  /// ParseObject().query('MyClassName').limit(200).skip(400);
+  /// ```
+  ParseQuery skip(int skip) {
+    _skip = skip;
+    return this;
+  }
+
+  ///	Restrict the fields returned by the query
+  ParseQuery setKeys(List<String> fields) {
+    _keys.addAll(fields);
+    return this;
+  }
+
+  /// Exclude specific fields from the returned query
+  ParseQuery excludeKeys(List<String> fields) {
+    _excludeKeys.addAll(fields);
+    return this;
+  }
+
+  void _assertOrderClassName(String field) {
+    assert(!_order.contains(field),
+        'Duplicated order field name. Same field should not be sorted multiple times.');
   }
 }

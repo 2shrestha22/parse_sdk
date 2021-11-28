@@ -27,8 +27,11 @@ class _HomePageState extends State<HomePage> {
   Future<List<PC>> queryPCs() async {
     final res = await ParseObject()
         .query('PC')
-        .where('ram', isLessThan: '50', isNotEqualTo: '35')
-        .order(['ram', '-cpu']).get();
+        .where('ram', isLessThanOrEqualTo: '50', isNotEqualTo: '35')
+        .orderByAscending('ram')
+        .limit(5)
+        .skip(5)
+        .excludeKeys(['ram']).get();
     return (jsonDecode(res)['results'] as List)
         .map((e) => PC.fromMap(e))
         .toList();
@@ -79,9 +82,9 @@ class _HomePageState extends State<HomePage> {
                           .createObject(
                         className: 'PC',
                         data: PC(
-                          cpuTextEditingController.text,
-                          ramTextEditingController.text,
-                          diskTextEditingController.text,
+                          cpu: cpuTextEditingController.text,
+                          ram: ramTextEditingController.text,
+                          disk: diskTextEditingController.text,
                         ).toMap(),
                       )
                           .then((value) {
@@ -93,9 +96,11 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            // List all objects from PC class
+
+            // where query
+            const Text('Query PCs'),
             FutureBuilder<List<PC>>(
-              future: getPCs(),
+              future: queryPCs(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Column(
@@ -113,10 +118,10 @@ class _HomePageState extends State<HomePage> {
                 return const CircularProgressIndicator();
               },
             ),
-            // where query
-            const Text('Query PCs'),
+            // List all objects from PC class
+            const Text('All PCs'),
             FutureBuilder<List<PC>>(
-              future: queryPCs(),
+              future: getPCs(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Column(
