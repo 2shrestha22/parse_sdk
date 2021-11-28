@@ -29,7 +29,8 @@ class ParseObject extends Service {
     return res.body;
   }
 
-  /// Query objects from a [className] with provided Query Constraints
+  /// Get list of objects by performing query on [className] with provided
+  /// constraints.
   ParseQuery query(String className) => ParseQuery(className, client);
 
   Future createObject({
@@ -44,29 +45,3 @@ class ParseObject extends Service {
     return res.body;
   }
 }
-
-
-
-// query parameters
-// where
-// order 	Specify a field to sort by
-// limit 	Limit the number of objects returned by the query
-// skip 	Use with limit to paginate through results
-// keys 	Restrict the fields returned by the query
-// excludeKeys 	Exclude specific fields from the returned query
-// include 	Use on Pointer columns to return the full object
-
-// where query parameter supports these options
-// $lt 	Less Than
-// $lte 	Less Than Or Equal To
-// $gt 	Greater Than
-// $gte 	Greater Than Or Equal To
-// $ne 	Not Equal To
-// $in 	Contained In
-// $nin 	Not Contained in
-// $exists 	A value is set for the key
-// $select 	This matches a value for a key in the result of a different query
-// $dontSelect 	Requires that a key’s value not match a value for a key in the result of a different query
-// $all 	Contains all of the given values
-// $regex 	Requires that a key’s value match a regular expression
-// $text 	Performs a full text search on indexed fields

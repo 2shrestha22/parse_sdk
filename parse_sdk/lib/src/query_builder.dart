@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:parse_sdk/src/parse_client.dart';
-import 'package:parse_sdk/src/services/database.dart';
 
 @Immutable()
 class ParseQuery {
@@ -74,7 +73,8 @@ class ParseQuery {
     }
   }
 
-  /// Provides where query parameters
+  /// Instead of an exact match, provide a hash with keys corresponding to
+  /// the comparisons to do.
   ParseQuery where(
     String column, {
 
@@ -223,13 +223,21 @@ class ParseQuery {
     return this;
   }
 
-  ///	Restrict the fields returned by the query
+  ///	Restrict the fields returned by the query so the result only contains
+  /// given fileds.
+  ///
+  /// But result always contain special built-in fields such as `objectId`,
+  /// `createdAt`, and `updatedAt`
   ParseQuery setKeys(List<String> fields) {
     _keys.addAll(fields);
     return this;
   }
 
-  /// Exclude specific fields from the returned query
+  /// Exclude specific fields from the returned query so the result does not
+  /// contain given fields.
+  ///
+  /// But result always contain special built-in fields such as `objectId`,
+  /// `createdAt`, and `updatedAt`
   ParseQuery excludeKeys(List<String> fields) {
     _excludeKeys.addAll(fields);
     return this;
