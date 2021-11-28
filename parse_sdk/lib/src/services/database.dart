@@ -1,7 +1,7 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:parse_sdk/src/parse_client.dart';
+import 'package:parse_sdk/src/query_builder.dart';
 import 'package:parse_sdk/src/service.dart';
 
 class ParseObject extends Service {
@@ -52,33 +52,7 @@ class ParseObject extends Service {
   }
 }
 
-class ParseQuery {
-  final String _className;
-  final ParseClient _client;
 
-  /// Allows to make complex queries on ParseServer
-  ParseQuery(this._className, this._client);
-
-  Map<String, String>? _whereEqualToQuery;
-
-  /// Query objects from a [_className] with provided Query Constraints
-  Future get() async {
-    final res = await _client.get(
-      _client.buildUri(
-        path: '/classes/$_className',
-        // query: 'where={"ram":"32", "ram": "2"}',
-        query: 'where=$_whereEqualToQuery',
-      ),
-    );
-    return res.body;
-  }
-
-  /// Query
-  ParseQuery whereEqualTo<T>(String columnName, Object value) {
-    _whereEqualToQuery?.putIfAbsent(columnName, () => jsonEncode(value));
-    return this;
-  }
-}
 
 // query parameters
 // where

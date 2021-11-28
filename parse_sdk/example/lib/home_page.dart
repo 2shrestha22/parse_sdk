@@ -33,7 +33,8 @@ class _HomePageState extends State<HomePage> {
         .query(
           className: 'PC',
         )
-        .whereEqualTo('ram', 42)
+        .whereEqualTo('disk', '94')
+        .whereNotEqualTo('ram', '60')
         .get();
     return (jsonDecode(res)['results'] as List)
         .map((e) => PC.fromMap(e))
@@ -79,7 +80,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                   TextButton(
                     onPressed: () {
-                      print(identical(ParseObject(), ParseObject()));
+                      debugPrint(
+                          identical(ParseObject(), ParseObject()).toString());
                       ParseObject()
                           .createObject(
                         className: 'PC',
