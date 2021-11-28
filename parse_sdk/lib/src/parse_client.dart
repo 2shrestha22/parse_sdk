@@ -26,12 +26,14 @@ class ParseClient extends http.BaseClient {
   Uri buildUri({
     required String path,
     String? query,
+    Map<String, dynamic>? queryParameters,
   }) {
     final baseUrl = (_options.serverUrl.endsWith('/'))
         ? _options.serverUrl.substring(0, _options.serverUrl.length - 1)
         : _options.serverUrl;
 
-    return Uri.parse("$baseUrl$path").replace(query: query);
+    return Uri.parse("$baseUrl$path")
+        .replace(query: query, queryParameters: queryParameters);
   }
 
   @override

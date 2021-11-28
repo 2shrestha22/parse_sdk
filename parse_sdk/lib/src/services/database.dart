@@ -30,14 +30,7 @@ class ParseObject extends Service {
   }
 
   /// Query objects from a [className] with provided Query Constraints
-  ParseQuery query({
-    required String className,
-  }) {
-    return ParseQuery(className, client);
-    // final res = await client.get(client.uri('/classes/$className'));
-    // log(res.body);
-    // return res.body;
-  }
+  ParseQuery query(String className) => ParseQuery(className, client);
 
   Future createObject({
     required String className,

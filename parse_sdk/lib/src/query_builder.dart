@@ -1,16 +1,10 @@
 import 'dart:convert';
-import 'dart:developer';
 
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:parse_sdk/src/parse_client.dart';
+import 'package:parse_sdk/src/services/database.dart';
 
-// class QueryBuilder {
-//   final String className;
-
-//   final a = QueryBuilder('ClassName').where('book').isEqualTo('My Book');
-
-//   QueryBuilder(this.className);
-// }
-
+@Immutable()
 class ParseQuery {
   final String _className;
   final ParseClient _client;
@@ -18,48 +12,87 @@ class ParseQuery {
   /// Allows to make complex queries on ParseServer
   ParseQuery(this._className, this._client);
 
-  final Map<String, dynamic> _whereQueries = <String, dynamic>{};
-  final Map<String, dynamic> _limiterQueries = <String, dynamic>{};
+  /// where query string
+  final Map<String, dynamic> _whereQuery = <String, dynamic>{};
 
-  String? queryString;
+  /// order query string
+  final List<String> _order = [];
+
+  /// limit 	Limit the number of objects returned by the query
+  // skip 	Use with limit to paginate through results
+  // keys 	Restrict the fields returned by the query
+  // excludeKeys 	Exclude specific fields from the returned query
+  // include 	Use on Pointer columns to return the full object
+  final Map<String, dynamic> _limiterQueries = <String, dynamic>{};
 
   /// Query objects from a [_className] with provided Query Constraints
   Future get() async {
-    // _buildQueryString();
     final res = await _client.get(
       _client.buildUri(
         path: '/classes/$_className',
-        query: _buildQueryString(),
+        queryParameters: _getQueryParameters(),
       ),
     );
     return res.body;
   }
 
-  String? _buildQueryString() {
-    if (_whereQueries.isEmpty) return null;
-    // _whereQueries.removeWhere((key, value) => true);
-    final encodedStr = jsonEncode(_whereQueries);
-    final qStr = '''where=$encodedStr''';
-    log('Query String starts.');
-    log(qStr);
-    log('Query String ends');
-    return qStr;
+  Map<String, dynamic>? _getQueryParameters() {
+    final query = {
+      "where": jsonEncode(_whereQuery),
+      "order": jsonEncode(_order),
+    };
+    // remove null values from query
+    query.removeWhere((key, value) => jsonDecode(value)?.isEmpty ?? true);
+    if (query.isEmpty) {
+      // if all values are null that means query is `{}`, i.e. empty
+      // then return null
+      return null;
+    } else {
+      return query;
+    }
   }
 
+  /// Provides where query parameters
   ParseQuery where(
     String column, {
+
+    /// $lt 	Less Than
     Object? isLessThan,
+
+    /// $lte 	Less Than Or Equal To
     Object? isLessThanOrEqualTo,
+
+    /// $gt 	Greater Than
     Object? isGreaterThan,
+
+    /// $gte 	Greater Than Or Equal To
     Object? isGreaterThanOrEqualTo,
+
+    /// $ne 	Not Equal To
     Object? isNotEqualTo,
+
+    /// $in 	Contained In
     List<Object>? isContainedIn,
+
+    /// $nin 	Not Contained in
     List<Object>? isNotContainedIn,
+
+    /// $exists 	A value is set for the key
     Object? exists,
+
+    /// $select 	This matches a value for a key in the result of a different query
     Object? select,
+
+    /// $dontSelect 	Requires that a key’s value not match a value for a key in the result of a different query
     Object? dontSelect,
+
+    /// $all 	Contains all of the given values
     Object? all,
+
+    /// $regex 	Requires that a key’s value match a regular expression
     Object? regex,
+
+    /// $text 	Performs a full text search on indexed fields
     Object? text,
   }) {
     assert(
@@ -79,7 +112,7 @@ class ParseQuery {
       "At least single where parameter is needed.",
     );
 
-    _whereQueries.putIfAbsent(
+    _whereQuery.putIfAbsent(
       column,
       () => {
         "\$lt": isLessThan,
@@ -100,39 +133,27 @@ class ParseQuery {
     return this;
   }
 
-  /// Returns an object where the [String] column equals [value]
+  /// [ParseQuery] to get object where the [String] column equals [value]
   ParseQuery whereEqualTo(String column, dynamic value) {
-    _whereQueries.putIfAbsent(column, () => value);
+    _whereQuery.putIfAbsent(column, () => value);
     return this;
   }
 
-  // ParseQuery whereNotEqualTo(String column, dynamic value) {
-  //   _whereQueries.putIfAbsent(column, () => {'\$ne': value});
-  //   return this;
-  // }
+  /// You can use the order (ascending) parameter to specify a field to sort by.
+  /// Prefixing with a negative sign reverses the order (descending).
+  ///
+  /// You can sort by multiple fields by passing order a comma-separated list.
+
+  /// To retrieve documents that are ordered by `scores` in ascending order and
+  /// the `name` in descending order:
+  /// ```dart
+  /// ParseObject().query('MyClassName').order(["scores", "-name"]);
+  /// ```
+  ///
+  /// This sorts the results in descending order by the `name` field if the
+  /// previous sort keys (ascending order by the `score` field) are equal.
+  ParseQuery order(List<String> orderList) {
+    _order.addAll(orderList);
+    return this;
+  }
 }
-
-
-// query parameters
-// where
-// order 	Specify a field to sort by
-// limit 	Limit the number of objects returned by the query
-// skip 	Use with limit to paginate through results
-// keys 	Restrict the fields returned by the query
-// excludeKeys 	Exclude specific fields from the returned query
-// include 	Use on Pointer columns to return the full object
-
-// where query parameter supports these options
-// $lt 	Less Than
-// $lte 	Less Than Or Equal To
-// $gt 	Greater Than
-// $gte 	Greater Than Or Equal To
-// $ne 	Not Equal To
-// $in 	Contained In
-// $nin 	Not Contained in
-// $exists 	A value is set for the key
-// $select 	This matches a value for a key in the result of a different query
-// $dontSelect 	Requires that a key’s value not match a value for a key in the result of a different query
-// $all 	Contains all of the given values
-// $regex 	Requires that a key’s value match a regular expression
-// $text 	Performs a full text search on indexed fields
