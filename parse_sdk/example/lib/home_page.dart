@@ -78,17 +78,14 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       debugPrint(
                           identical(ParseObject(), ParseObject()).toString());
-                      ParseObject()
-                          .create(
+                      ParseObject().create(
                         className: 'PC',
-                        data: PC(
-                          cpu: int.parse(cpuTextEditingController.text),
-                          ram: int.parse(ramTextEditingController.text),
-                          disk: int.parse(diskTextEditingController.text),
-                          createdAt: DateTime.now(),
-                        ).toJson(),
-                      )
-                          .then((value) {
+                        data: {
+                          "cpu": int.parse(cpuTextEditingController.text),
+                          "ram": int.parse(ramTextEditingController.text),
+                          "disk": int.parse(diskTextEditingController.text),
+                        },
+                      ).then((value) {
                         setState(() {});
                       });
                     },
@@ -110,8 +107,7 @@ class _HomePageState extends State<HomePage> {
                             pc: e,
                             onDelete: () {
                               ParseObject()
-                                  .delete(
-                                      className: 'PC', objectId: e.objectId!)
+                                  .delete(className: 'PC', objectId: e.objectId)
                                   .then((value) {
                                 setState(() {});
                               });
@@ -135,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                               onDelete: () {
                                 ParseObject()
                                     .delete(
-                                        className: 'PC', objectId: e.objectId!)
+                                        className: 'PC', objectId: e.objectId)
                                     .then((value) {
                                   setState(() {});
                                 });

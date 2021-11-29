@@ -25,9 +25,9 @@ class _$PCTearOff {
       {int? cpu,
       int? ram,
       int? disk,
-      DateTime? createdAt,
-      DateTime? updatedAt,
-      String? objectId}) {
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      required String objectId}) {
     return _PC(
       cpu: cpu,
       ram: ram,
@@ -51,9 +51,9 @@ mixin _$PC {
   int? get cpu => throw _privateConstructorUsedError;
   int? get ram => throw _privateConstructorUsedError;
   int? get disk => throw _privateConstructorUsedError;
-  DateTime? get createdAt => throw _privateConstructorUsedError;
-  DateTime? get updatedAt => throw _privateConstructorUsedError;
-  String? get objectId => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
+  String get objectId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -68,9 +68,9 @@ abstract class $PCCopyWith<$Res> {
       {int? cpu,
       int? ram,
       int? disk,
-      DateTime? createdAt,
-      DateTime? updatedAt,
-      String? objectId});
+      DateTime createdAt,
+      DateTime updatedAt,
+      String objectId});
 }
 
 /// @nodoc
@@ -106,15 +106,15 @@ class _$PCCopyWithImpl<$Res> implements $PCCopyWith<$Res> {
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as DateTime,
       updatedAt: updatedAt == freezed
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as DateTime,
       objectId: objectId == freezed
           ? _value.objectId
           : objectId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
     ));
   }
 }
@@ -128,9 +128,9 @@ abstract class _$PCCopyWith<$Res> implements $PCCopyWith<$Res> {
       {int? cpu,
       int? ram,
       int? disk,
-      DateTime? createdAt,
-      DateTime? updatedAt,
-      String? objectId});
+      DateTime createdAt,
+      DateTime updatedAt,
+      String objectId});
 }
 
 /// @nodoc
@@ -167,15 +167,15 @@ class __$PCCopyWithImpl<$Res> extends _$PCCopyWithImpl<$Res>
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as DateTime,
       updatedAt: updatedAt == freezed
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as DateTime,
       objectId: objectId == freezed
           ? _value.objectId
           : objectId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
     ));
   }
 }
@@ -187,9 +187,9 @@ class _$_PC implements _PC {
       {this.cpu,
       this.ram,
       this.disk,
-      this.createdAt,
-      this.updatedAt,
-      this.objectId});
+      required this.createdAt,
+      required this.updatedAt,
+      required this.objectId});
 
   factory _$_PC.fromJson(Map<String, dynamic> json) => _$$_PCFromJson(json);
 
@@ -200,11 +200,11 @@ class _$_PC implements _PC {
   @override
   final int? disk;
   @override
-  final DateTime? createdAt;
+  final DateTime createdAt;
   @override
-  final DateTime? updatedAt;
+  final DateTime updatedAt;
   @override
-  final String? objectId;
+  final String objectId;
 
   @override
   String toString() {
@@ -246,9 +246,9 @@ abstract class _PC implements PC {
       {int? cpu,
       int? ram,
       int? disk,
-      DateTime? createdAt,
-      DateTime? updatedAt,
-      String? objectId}) = _$_PC;
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      required String objectId}) = _$_PC;
 
   factory _PC.fromJson(Map<String, dynamic> json) = _$_PC.fromJson;
 
@@ -259,11 +259,11 @@ abstract class _PC implements PC {
   @override
   int? get disk;
   @override
-  DateTime? get createdAt;
+  DateTime get createdAt;
   @override
-  DateTime? get updatedAt;
+  DateTime get updatedAt;
   @override
-  String? get objectId;
+  String get objectId;
   @override
   @JsonKey(ignore: true)
   _$PCCopyWith<_PC> get copyWith => throw _privateConstructorUsedError;
