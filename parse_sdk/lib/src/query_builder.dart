@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:http/http.dart';
 import 'package:parse_sdk/src/parse_client.dart';
 
 @Immutable()
@@ -33,14 +34,13 @@ class ParseQuery {
   String? _include;
 
   /// Query objects from a [_className] with provided Query Constraints
-  Future get() async {
-    final res = await _client.get(
+  Future<Response> get() {
+    return _client.get(
       _client.buildUri(
         path: '/classes/$_className',
         queryParameters: _getQueryParameters(),
       ),
     );
-    return res.body;
   }
 
   Map<String, dynamic>? _getQueryParameters() {

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:http/http.dart';
 import 'package:parse_sdk/src/parse_client.dart';
 import 'package:parse_sdk/src/query_builder.dart';
 import 'package:parse_sdk/src/service.dart';
@@ -20,34 +21,31 @@ class ParseObject extends Service {
   }
 
   /// Get a object with a [objectId] from [className]
-  Future<dynamic> get({
+  Future<Response> get({
     required String className,
     required String objectId,
-  }) async {
-    final res = await client
-        .get(client.buildUri(path: '/classes/$className/$objectId'));
-    return res.body;
+  }) {
+    return client.get(client.buildUri(path: '/classes/$className/$objectId'));
   }
 
   /// Deletes a object with a [objectId] from [className]
   Future<dynamic> delete({
     required String className,
     required String objectId,
-  }) async {
-    final res = await client
+  }) {
+    return client
         .delete(client.buildUri(path: '/classes/$className/$objectId'));
-    return res.body;
   }
 
+  /// Create a object in [className] class
   Future create({
     required String className,
     required Map<String, dynamic> data,
-  }) async {
-    final res = await client.post(
+  }) {
+    return client.post(
       client.buildUri(path: '/classes/$className'),
       body: jsonEncode(_removeGetOnlyFields(data)),
     );
-    return res.body;
   }
 
   /// Get list of objects by performing query on [className] with provided

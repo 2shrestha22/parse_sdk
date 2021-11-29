@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<List<PC>> getPCs() async {
     final res = await ParseObject().query('PC').get();
-    return (jsonDecode(res)['results'] as List)
+    return (jsonDecode(res.body)['results'] as List)
         .map((e) => PC.fromJson(e))
         .toList();
   }
@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
         .orderByAscending('ram')
         .limit(50)
         .get();
-    return (jsonDecode(res)['results'] as List)
+    return (jsonDecode(res.body)['results'] as List)
         .map((e) => PC.fromJson(e))
         .toList();
   }
