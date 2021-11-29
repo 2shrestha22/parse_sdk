@@ -18,7 +18,7 @@ class ParseObject extends Service {
   }
 
   /// Get a object with a [objectId] from [className]
-  Future get({
+  Future<dynamic> get({
     required String className,
     required String objectId,
   }) async {
@@ -27,9 +27,15 @@ class ParseObject extends Service {
     return res.body;
   }
 
-  /// Get list of objects by performing query on [className] with provided
-  /// constraints.
-  ParseQuery query(String className) => ParseQuery(className, client);
+  /// Deletes a object with a [objectId] from [className]
+  Future<dynamic> delete({
+    required String className,
+    required String objectId,
+  }) async {
+    final res = await client
+        .delete(client.buildUri(path: '/classes/$className/$objectId'));
+    return res.body;
+  }
 
   Future create({
     required String className,
@@ -41,6 +47,10 @@ class ParseObject extends Service {
     );
     return res.body;
   }
+
+  /// Get list of objects by performing query on [className] with provided
+  /// constraints.
+  ParseQuery query(String className) => ParseQuery(className, client);
 
   /// removes fields that should not be sent as data
   Map<String, dynamic> _removeGetOnlyFields(Map<String, dynamic> data) {

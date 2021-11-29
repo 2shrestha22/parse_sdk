@@ -21,12 +21,20 @@ PC _$PCFromJson(Map<String, dynamic> json) {
 class _$PCTearOff {
   const _$PCTearOff();
 
-  _PC call({String? cpu, String? ram, String? disk, DateTime? createdAt}) {
+  _PC call(
+      {String? cpu,
+      String? ram,
+      String? disk,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      String? objectId}) {
     return _PC(
       cpu: cpu,
       ram: ram,
       disk: disk,
       createdAt: createdAt,
+      updatedAt: updatedAt,
+      objectId: objectId,
     );
   }
 
@@ -44,6 +52,8 @@ mixin _$PC {
   String? get ram => throw _privateConstructorUsedError;
   String? get disk => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
+  String? get objectId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -54,7 +64,13 @@ mixin _$PC {
 abstract class $PCCopyWith<$Res> {
   factory $PCCopyWith(PC value, $Res Function(PC) then) =
       _$PCCopyWithImpl<$Res>;
-  $Res call({String? cpu, String? ram, String? disk, DateTime? createdAt});
+  $Res call(
+      {String? cpu,
+      String? ram,
+      String? disk,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      String? objectId});
 }
 
 /// @nodoc
@@ -71,6 +87,8 @@ class _$PCCopyWithImpl<$Res> implements $PCCopyWith<$Res> {
     Object? ram = freezed,
     Object? disk = freezed,
     Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? objectId = freezed,
   }) {
     return _then(_value.copyWith(
       cpu: cpu == freezed
@@ -89,6 +107,14 @@ class _$PCCopyWithImpl<$Res> implements $PCCopyWith<$Res> {
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      updatedAt: updatedAt == freezed
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      objectId: objectId == freezed
+          ? _value.objectId
+          : objectId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -98,7 +124,13 @@ abstract class _$PCCopyWith<$Res> implements $PCCopyWith<$Res> {
   factory _$PCCopyWith(_PC value, $Res Function(_PC) then) =
       __$PCCopyWithImpl<$Res>;
   @override
-  $Res call({String? cpu, String? ram, String? disk, DateTime? createdAt});
+  $Res call(
+      {String? cpu,
+      String? ram,
+      String? disk,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      String? objectId});
 }
 
 /// @nodoc
@@ -116,6 +148,8 @@ class __$PCCopyWithImpl<$Res> extends _$PCCopyWithImpl<$Res>
     Object? ram = freezed,
     Object? disk = freezed,
     Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? objectId = freezed,
   }) {
     return _then(_PC(
       cpu: cpu == freezed
@@ -134,6 +168,14 @@ class __$PCCopyWithImpl<$Res> extends _$PCCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      updatedAt: updatedAt == freezed
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      objectId: objectId == freezed
+          ? _value.objectId
+          : objectId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -141,7 +183,13 @@ class __$PCCopyWithImpl<$Res> extends _$PCCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_PC implements _PC {
-  const _$_PC({this.cpu, this.ram, this.disk, this.createdAt});
+  const _$_PC(
+      {this.cpu,
+      this.ram,
+      this.disk,
+      this.createdAt,
+      this.updatedAt,
+      this.objectId});
 
   factory _$_PC.fromJson(Map<String, dynamic> json) => _$$_PCFromJson(json);
 
@@ -153,10 +201,14 @@ class _$_PC implements _PC {
   final String? disk;
   @override
   final DateTime? createdAt;
+  @override
+  final DateTime? updatedAt;
+  @override
+  final String? objectId;
 
   @override
   String toString() {
-    return 'PC(cpu: $cpu, ram: $ram, disk: $disk, createdAt: $createdAt)';
+    return 'PC(cpu: $cpu, ram: $ram, disk: $disk, createdAt: $createdAt, updatedAt: $updatedAt, objectId: $objectId)';
   }
 
   @override
@@ -168,11 +220,16 @@ class _$_PC implements _PC {
             (identical(other.ram, ram) || other.ram == ram) &&
             (identical(other.disk, disk) || other.disk == disk) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
+            (identical(other.objectId, objectId) ||
+                other.objectId == objectId));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, cpu, ram, disk, createdAt);
+  int get hashCode =>
+      Object.hash(runtimeType, cpu, ram, disk, createdAt, updatedAt, objectId);
 
   @JsonKey(ignore: true)
   @override
@@ -186,7 +243,12 @@ class _$_PC implements _PC {
 
 abstract class _PC implements PC {
   const factory _PC(
-      {String? cpu, String? ram, String? disk, DateTime? createdAt}) = _$_PC;
+      {String? cpu,
+      String? ram,
+      String? disk,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      String? objectId}) = _$_PC;
 
   factory _PC.fromJson(Map<String, dynamic> json) = _$_PC.fromJson;
 
@@ -198,6 +260,10 @@ abstract class _PC implements PC {
   String? get disk;
   @override
   DateTime? get createdAt;
+  @override
+  DateTime? get updatedAt;
+  @override
+  String? get objectId;
   @override
   @JsonKey(ignore: true)
   _$PCCopyWith<_PC> get copyWith => throw _privateConstructorUsedError;

@@ -105,8 +105,18 @@ class _HomePageState extends State<HomePage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Column(
-                    children:
-                        snapshot.data!.map((e) => PcListItem(pc: e)).toList(),
+                    children: snapshot.data!
+                        .map((e) => PcListItem(
+                            pc: e,
+                            onDelete: () {
+                              ParseObject()
+                                  .delete(
+                                      className: 'PC', objectId: e.objectId!)
+                                  .then((value) {
+                                setState(() {});
+                              });
+                            }))
+                        .toList(),
                   );
                 }
                 return const CircularProgressIndicator();
@@ -119,8 +129,19 @@ class _HomePageState extends State<HomePage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Column(
-                    children:
-                        snapshot.data!.map((e) => PcListItem(pc: e)).toList(),
+                    children: snapshot.data!
+                        .map((e) => PcListItem(
+                              pc: e,
+                              onDelete: () {
+                                ParseObject()
+                                    .delete(
+                                        className: 'PC', objectId: e.objectId!)
+                                    .then((value) {
+                                  setState(() {});
+                                });
+                              },
+                            ))
+                        .toList(),
                   );
                 }
                 return const CircularProgressIndicator();
@@ -134,26 +155,41 @@ class _HomePageState extends State<HomePage> {
 }
 
 class PcListItem extends StatelessWidget {
-  const PcListItem({Key? key, required this.pc}) : super(key: key);
+  const PcListItem({Key? key, required this.pc, required this.onDelete})
+      : super(key: key);
 
   final PC pc;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 40,
+      // height: 40,
       child: Card(
-        child: Wrap(
-          alignment: WrapAlignment.start,
-          spacing: 20,
-          runSpacing: 10,
-          children: [
-            Text('CPU ${pc.cpu} %'),
-            Text('RAM ${pc.ram} %'),
-            Text('Disk ${pc.disk} %'),
-            Text(pc.createdAt.toString().substring(0, 10)),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('CPU ${pc.cpu} %'),
+                        Text('RAM ${pc.ram} %'),
+                        Text('Disk ${pc.disk} %'),
+                      ],
+                    ),
+                    Text(pc.createdAt.toString().substring(0, 10)),
+                  ],
+                ),
+              ),
+              IconButton(onPressed: onDelete, icon: const Icon(Icons.delete))
+            ],
+          ),
         ),
       ),
     );

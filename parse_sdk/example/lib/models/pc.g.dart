@@ -13,6 +13,10 @@ _$_PC _$$_PCFromJson(Map<String, dynamic> json) => _$_PC(
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
+      updatedAt: json['updatedAt'] == null
+          ? null
+          : DateTime.parse(json['updatedAt'] as String),
+      objectId: json['objectId'] as String?,
     );
 
 Map<String, dynamic> _$$_PCToJson(_$_PC instance) => <String, dynamic>{
@@ -20,4 +24,6 @@ Map<String, dynamic> _$$_PCToJson(_$_PC instance) => <String, dynamic>{
       'ram': instance.ram,
       'disk': instance.disk,
       'createdAt': instance.createdAt?.toIso8601String(),
+      'updatedAt': instance.updatedAt?.toIso8601String(),
+      'objectId': instance.objectId,
     };

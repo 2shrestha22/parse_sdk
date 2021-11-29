@@ -9,6 +9,8 @@ class PC with _$PC {
     String? ram,
     String? disk,
     DateTime? createdAt,
+    DateTime? updatedAt,
+    String? objectId,
   }) = _PC;
 
   factory PC.fromJson(Map<String, dynamic> json) => _$PCFromJson(json);
