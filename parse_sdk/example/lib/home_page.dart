@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
   Future<List<PC>> getPCs() async {
     final res = await ParseObject().query('PC').get();
     return (jsonDecode(res)['results'] as List)
-        .map((e) => PC.fromMap(e))
+        .map((e) => PC.fromJson(e))
         .toList();
   }
 
@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
         .limit(50)
         .get();
     return (jsonDecode(res)['results'] as List)
-        .map((e) => PC.fromMap(e))
+        .map((e) => PC.fromJson(e))
         .toList();
   }
 
@@ -85,7 +85,8 @@ class _HomePageState extends State<HomePage> {
                           cpu: cpuTextEditingController.text,
                           ram: ramTextEditingController.text,
                           disk: diskTextEditingController.text,
-                        ).toMap(),
+                          createdAt: DateTime.now(),
+                        ).toJson(),
                       )
                           .then((value) {
                         setState(() {});
@@ -104,19 +105,8 @@ class _HomePageState extends State<HomePage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Column(
-                    children: snapshot.data!
-                        .map((e) => Row(
-                              children: [
-                                Expanded(child: Text('CPU ${e.cpu} %')),
-                                Expanded(child: Text('RAM ${e.ram} %')),
-                                Expanded(child: Text('Disk ${e.disk} %')),
-                                Expanded(
-                                    child: Text(e.createdAt
-                                        .toString()
-                                        .substring(0, 10))),
-                              ],
-                            ))
-                        .toList(),
+                    children:
+                        snapshot.data!.map((e) => PcListItem(pc: e)).toList(),
                   );
                 }
                 return const CircularProgressIndicator();
@@ -129,20 +119,40 @@ class _HomePageState extends State<HomePage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Column(
-                    children: snapshot.data!
-                        .map((e) => Row(
-                              children: [
-                                Expanded(child: Text('CPU ${e.cpu} %')),
-                                Expanded(child: Text('RAM ${e.ram} %')),
-                                Expanded(child: Text('Disk ${e.disk} %')),
-                              ],
-                            ))
-                        .toList(),
+                    children:
+                        snapshot.data!.map((e) => PcListItem(pc: e)).toList(),
                   );
                 }
                 return const CircularProgressIndicator();
               },
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class PcListItem extends StatelessWidget {
+  const PcListItem({Key? key, required this.pc}) : super(key: key);
+
+  final PC pc;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 40,
+      child: Card(
+        child: Wrap(
+          alignment: WrapAlignment.start,
+          spacing: 20,
+          runSpacing: 10,
+          children: [
+            Text('CPU ${pc.cpu} %'),
+            Text('RAM ${pc.ram} %'),
+            Text('Disk ${pc.disk} %'),
+            Text(pc.createdAt.toString().substring(0, 10)),
           ],
         ),
       ),

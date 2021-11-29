@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:parse_sdk/src/parse_client.dart';
 import 'package:parse_sdk/src/query_builder.dart';
 import 'package:parse_sdk/src/service.dart';
@@ -39,9 +37,16 @@ class ParseObject extends Service {
   }) async {
     final res = await client.post(
       client.buildUri(path: '/classes/$className'),
-      body: data,
+      body: _removeGetOnlyFields(data),
     );
-    log(res.body);
     return res.body;
+  }
+
+  /// removes fields that should not be sent as data
+  Map<String, dynamic> _removeGetOnlyFields(Map<String, dynamic> data) {
+    return data
+      ..remove('updatedAt')
+      ..remove('objectId')
+      ..remove('createdAt');
   }
 }

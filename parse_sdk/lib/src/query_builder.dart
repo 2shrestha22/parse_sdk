@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:parse_sdk/src/parse_client.dart';
@@ -48,7 +47,6 @@ class ParseQuery {
     final query = <String, dynamic>{};
     if (_whereQuery.isNotEmpty) {
       query['where'] = jsonEncode(_whereQuery);
-      log(_whereQuery.toString());
     }
     if (_order.isNotEmpty) {
       query['order'] = jsonEncode(_order);
@@ -71,7 +69,6 @@ class ParseQuery {
     if (query.isEmpty) {
       return null;
     } else {
-      log(query.toString());
       return query;
     }
   }

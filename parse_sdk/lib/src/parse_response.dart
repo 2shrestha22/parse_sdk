@@ -2,9 +2,9 @@
 ///
 /// You can extend this class to create a new class
 abstract class ParseResponse {
-  String objectId;
-  DateTime createdAt;
-  DateTime updatedAt;
+  final String objectId;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   /// Abstract class with some filed that all ParseResponse contains
   ParseResponse({

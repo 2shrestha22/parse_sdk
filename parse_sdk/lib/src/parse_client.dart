@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:http/http.dart' as http;
 
 class ParseClient extends http.BaseClient {
@@ -48,6 +51,11 @@ class ParseClient extends http.BaseClient {
     if (_options.restApiKey != null) {
       request.headers['X-Parse-REST-API-Key'] = _options.restApiKey!;
     }
+
+    log('${request.method}: ${request.url.origin}/${request.url.path}');
+    log('Headers:\n${jsonEncode(request.headers)}');
+    log('QueryParams:\n${request.url.queryParameters}');
+    log('\n\n');
     return _inner!.send(request);
   }
 
