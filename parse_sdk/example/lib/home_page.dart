@@ -27,9 +27,9 @@ class _HomePageState extends State<HomePage> {
   Future<List<PC>> queryPCs() async {
     final res = await ParseObject()
         .query('PC')
-        .where('createdAt', isLessThanOrEqualTo: DateTime(2021, 11, 28))
-        .where('cpu', isLessThanOrEqualTo: '60', isNotEqualTo: '35')
-        .orderByAscending('createdAt')
+        .where('createdAt', isNotEqualTo: DateTime(2021, 11, 28))
+        .where('cpu', isLessThanOrEqualTo: 60, isNotEqualTo: 35)
+        .orderByAscending('ram')
         .limit(50)
         .get();
     return (jsonDecode(res)['results'] as List)
@@ -82,9 +82,9 @@ class _HomePageState extends State<HomePage> {
                           .create(
                         className: 'PC',
                         data: PC(
-                          cpu: cpuTextEditingController.text,
-                          ram: ramTextEditingController.text,
-                          disk: diskTextEditingController.text,
+                          cpu: int.parse(cpuTextEditingController.text),
+                          ram: int.parse(ramTextEditingController.text),
+                          disk: int.parse(diskTextEditingController.text),
                           createdAt: DateTime.now(),
                         ).toJson(),
                       )

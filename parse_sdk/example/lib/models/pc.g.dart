@@ -7,9 +7,9 @@ part of 'pc.dart';
 // **************************************************************************
 
 _$_PC _$$_PCFromJson(Map<String, dynamic> json) => _$_PC(
-      cpu: json['cpu'] as String?,
-      ram: json['ram'] as String?,
-      disk: json['disk'] as String?,
+      cpu: json['cpu'] as int?,
+      ram: json['ram'] as int?,
+      disk: json['disk'] as int?,
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),

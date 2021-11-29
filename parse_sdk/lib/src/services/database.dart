@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:parse_sdk/src/parse_client.dart';
 import 'package:parse_sdk/src/query_builder.dart';
 import 'package:parse_sdk/src/service.dart';
@@ -43,7 +45,7 @@ class ParseObject extends Service {
   }) async {
     final res = await client.post(
       client.buildUri(path: '/classes/$className'),
-      body: _removeGetOnlyFields(data),
+      body: jsonEncode(_removeGetOnlyFields(data)),
     );
     return res.body;
   }

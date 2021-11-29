@@ -5,9 +5,9 @@ part 'pc.g.dart';
 @freezed
 class PC with _$PC {
   const factory PC({
-    String? cpu,
-    String? ram,
-    String? disk,
+    int? cpu,
+    int? ram,
+    int? disk,
     DateTime? createdAt,
     DateTime? updatedAt,
     String? objectId,
