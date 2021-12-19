@@ -1,4 +1,4 @@
-# Parse SDK for Flutter
+# Parse SDK for Flutter (Under Development)
 
 [ParseSDK](https://github.com/2shrestha22/parse_flutter) is a minimal SDK (unofficial) for [Parse](https://docs.parseplatform.org/).
 As being minimal, ParseSDK provides results in JSON format. This SDK is under development and does not contains all the features you may need hence it may not be good idea to use it in production app.
