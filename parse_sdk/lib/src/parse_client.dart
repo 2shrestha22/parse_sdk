@@ -47,6 +47,10 @@ class ParseClient extends http.BaseClient {
     }
     // add X-Parse-Application-Id header
     request.headers['X-Parse-Application-Id'] = _options.appId;
+    // add X-Parse-Application-Id header
+    if (_options.masterKey != null) {
+      request.headers['X-Parse-Master-Key'] = _options.masterKey!;
+    }
     // add X-Parse-REST-API-Key header if not empty
     if (_options.restApiKey != null) {
       request.headers['X-Parse-REST-API-Key'] = _options.restApiKey!;

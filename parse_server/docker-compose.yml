@@ -1,3 +1,4 @@
+version: "3.9"
 services:
   mongo-db:
     image: mongo
@@ -15,6 +16,9 @@ services:
       - PARSE_SERVER_DATABASE_URI=mongodb://admin:admin@mongo/parse_server?authSource=admin
     links:
       - mongo-db:mongo
+    volumes:
+      - config-vol:/parse-server/config
+      - cloud-code-vol:/parse-server/cloud
 
   parse-dashboard:
     image: parseplatform/parse-dashboard
@@ -28,4 +32,7 @@ services:
       - PARSE_DASHBOARD_APP_NAME=TestApp
       - PARSE_DASHBOARD_USER_ID=admin
       - PARSE_DASHBOARD_USER_PASSWORD=admin
-
+  
+volumes:
+  config-vol:
+  cloud-code-vol:

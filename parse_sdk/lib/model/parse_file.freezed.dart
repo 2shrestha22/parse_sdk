@@ -118,8 +118,8 @@ class __$ParseFileCopyWithImpl<$Res> extends _$ParseFileCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_ParseFile implements _ParseFile {
-  const _$_ParseFile({required this.name, required this.url});
+class _$_ParseFile extends _ParseFile {
+  _$_ParseFile({required this.name, required this.url}) : super._();
 
   factory _$_ParseFile.fromJson(Map<String, dynamic> json) =>
       _$$_ParseFileFromJson(json);
@@ -157,9 +157,10 @@ class _$_ParseFile implements _ParseFile {
   }
 }
 
-abstract class _ParseFile implements ParseFile {
-  const factory _ParseFile({required String name, required String url}) =
+abstract class _ParseFile extends ParseFile {
+  factory _ParseFile({required String name, required String url}) =
       _$_ParseFile;
+  _ParseFile._() : super._();
 
   factory _ParseFile.fromJson(Map<String, dynamic> json) =
       _$_ParseFile.fromJson;

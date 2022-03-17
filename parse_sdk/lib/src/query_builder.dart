@@ -137,19 +137,19 @@ class ParseQuery {
     _whereQuery.putIfAbsent(
       column,
       () => {
-        "\$lt": _toParseObject(isLessThan),
-        "\$lte": _toParseObject(isLessThanOrEqualTo),
-        "\$gt": _toParseObject(isGreaterThan),
-        "\$gte": _toParseObject(isGreaterThanOrEqualTo),
-        "\$ne": _toParseObject(isNotEqualTo),
-        "\$in": _toParseObject(isContainedIn),
-        "\$nin": _toParseObject(isNotContainedIn),
-        "\$exists": _toParseObject(exists),
-        "\$select": _toParseObject(select),
-        "\$dontSelect": _toParseObject(dontSelect),
-        "\$all": _toParseObject(all),
-        "\$regex": _toParseObject(regex),
-        "\$text": _toParseObject(text)
+        "\$lt": _toParsedObject(isLessThan),
+        "\$lte": _toParsedObject(isLessThanOrEqualTo),
+        "\$gt": _toParsedObject(isGreaterThan),
+        "\$gte": _toParsedObject(isGreaterThanOrEqualTo),
+        "\$ne": _toParsedObject(isNotEqualTo),
+        "\$in": _toParsedObject(isContainedIn),
+        "\$nin": _toParsedObject(isNotContainedIn),
+        "\$exists": _toParsedObject(exists),
+        "\$select": _toParsedObject(select),
+        "\$dontSelect": _toParsedObject(dontSelect),
+        "\$all": _toParsedObject(all),
+        "\$regex": _toParsedObject(regex),
+        "\$text": _toParsedObject(text)
       }..removeWhere((key, value) => value == null),
     );
     return this;
@@ -248,7 +248,7 @@ class ParseQuery {
         'Duplicated order field name. Same field should not be sorted multiple times.');
   }
 
-  Object? _toParseObject(Object? object) {
+  Object? _toParsedObject(Object? object) {
     if (object is DateTime) {
       return {"__type": "Date", "iso": object.toIso8601String()};
     }

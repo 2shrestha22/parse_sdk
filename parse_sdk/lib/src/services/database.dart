@@ -5,17 +5,17 @@ import 'package:parse_sdk/src/parse_client.dart';
 import 'package:parse_sdk/src/query_builder.dart';
 import 'package:parse_sdk/src/service.dart';
 
-class ParseObject extends Service {
-  ParseObject._() : super(ParseClient.instance);
+class ParseDatabase extends Service {
+  ParseDatabase._() : super(ParseClient.instance);
 
-  static ParseObject? _instance;
+  static ParseDatabase? _instance;
 
   /// Returns a singleton
-  factory ParseObject() {
+  factory ParseDatabase() {
     if (_instance != null) {
       return _instance!;
     } else {
-      _instance = ParseObject._();
+      _instance = ParseDatabase._();
     }
     return _instance!;
   }
@@ -38,7 +38,7 @@ class ParseObject extends Service {
   }
 
   /// Create a object in [className] class
-  Future create({
+  Future<Response> create({
     required String className,
     required Map<String, dynamic> data,
   }) {

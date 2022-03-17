@@ -5,14 +5,25 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "parse_sdk",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "parse_sdk (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
             "name": "example",
-            "cwd": "parse_sdk/example",
+            "cwd": "example",
             "request": "launch",
             "type": "dart"
         },
         {
             "name": "example (profile mode)",
-            "cwd": "parse_sdk/example",
+            "cwd": "example",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"

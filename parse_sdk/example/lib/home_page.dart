@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:example/models/pc.dart';
 import 'package:flutter/material.dart';
 import 'package:parse_sdk/parse_sdk.dart';
+import 'package:file_picker/file_picker.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,14 +21,14 @@ class _HomePageState extends State<HomePage> {
   final diskTextEditingController = TextEditingController();
 
   Future<List<PC>> getPCs() async {
-    final res = await ParseObject().query('PC').get();
+    final res = await ParseDatabase().query('PC').get();
     return (jsonDecode(res.body)['results'] as List)
         .map((e) => PC.fromJson(e))
         .toList();
   }
 
   Future<List<PC>> queryPCs() async {
-    final res = await ParseObject()
+    final res = await ParseDatabase()
         .query('PC')
         .where('createdAt', isNotEqualTo: DateTime(2021, 11, 28))
         .where('cpu', isLessThanOrEqualTo: 60, isNotEqualTo: 35)
@@ -50,35 +53,56 @@ class _HomePageState extends State<HomePage> {
             Form(
               child: Column(
                 children: [
-                  TextFormField(
-                    controller: cpuTextEditingController
-                      ..text = Random().nextInt(100).toString(),
-                    decoration: const InputDecoration(
-                      labelText: 'CPU Usage %',
-                      isDense: true,
-                    ),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: TextFormField(
+                          controller: cpuTextEditingController
+                            ..text = Random().nextInt(100).toString(),
+                          decoration: const InputDecoration(
+                            labelText: 'CPU Usage %',
+                            isDense: true,
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        child: TextFormField(
+                          controller: ramTextEditingController
+                            ..text = Random().nextInt(100).toString(),
+                          decoration: const InputDecoration(
+                            labelText: 'RAM Usage %',
+                            isDense: true,
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        child: TextFormField(
+                          controller: diskTextEditingController
+                            ..text = Random().nextInt(100).toString(),
+                          decoration: const InputDecoration(
+                            labelText: 'Disk Usage %',
+                            isDense: true,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  TextFormField(
-                    controller: ramTextEditingController
-                      ..text = Random().nextInt(100).toString(),
-                    decoration: const InputDecoration(
-                      labelText: 'RAM Usage %',
-                      isDense: true,
-                    ),
-                  ),
-                  TextFormField(
-                    controller: diskTextEditingController
-                      ..text = Random().nextInt(100).toString(),
-                    decoration: const InputDecoration(
-                      labelText: 'Disk Usage %',
-                      isDense: true,
-                    ),
+                  TextButton(
+                    onPressed: () async {
+                      final pfile = await FilePicker.platform.pickFiles();
+                      if (pfile == null) return;
+                      final res = await ParseStorage()
+                          .uploadImage(file: File(pfile.files.first.path!));
+
+                      print(res.body);
+                    },
+                    child: const Text('Pick FIle < 10 MB'),
                   ),
                   TextButton(
                     onPressed: () {
-                      debugPrint(
-                          identical(ParseObject(), ParseObject()).toString());
-                      ParseObject().create(
+                      debugPrint(identical(ParseDatabase(), ParseDatabase())
+                          .toString());
+                      ParseDatabase().create(
                         className: 'PC',
                         data: {
                           "cpu": int.parse(cpuTextEditingController.text),
@@ -106,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                         .map((e) => PcListItem(
                             pc: e,
                             onDelete: () {
-                              ParseObject()
+                              ParseDatabase()
                                   .delete(className: 'PC', objectId: e.objectId)
                                   .then((value) {
                                 setState(() {});
@@ -129,7 +153,7 @@ class _HomePageState extends State<HomePage> {
                         .map((e) => PcListItem(
                               pc: e,
                               onDelete: () {
-                                ParseObject()
+                                ParseDatabase()
                                     .delete(
                                         className: 'PC', objectId: e.objectId)
                                     .then((value) {
