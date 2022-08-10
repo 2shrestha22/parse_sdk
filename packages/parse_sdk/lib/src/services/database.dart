@@ -6,36 +6,16 @@ import 'package:parse_sdk/src/query_builder.dart';
 import 'package:parse_sdk/src/service.dart';
 
 class ParseDatabase extends Service {
-  ParseDatabase._() : super(ParseClient.instance);
-
-  static ParseDatabase? _instance;
-
-  /// Returns a singleton
-  factory ParseDatabase() {
-    if (_instance != null) {
-      return _instance!;
-    } else {
-      _instance = ParseDatabase._();
-    }
-    return _instance!;
+  ParseDatabase._() : super(ParseClient.instance) {
+    _instance = ParseDatabase._();
   }
 
-  /// Get a object with a [objectId] from [className]
-  Future<Response> get({
-    required String className,
-    required String objectId,
-  }) {
-    return client.get(client.buildUri(path: '/classes/$className/$objectId'));
-  }
+  static late ParseDatabase _instance;
 
-  /// Deletes a object with a [objectId] from [className]
-  Future<dynamic> delete({
-    required String className,
-    required String objectId,
-  }) {
-    return client
-        .delete(client.buildUri(path: '/classes/$className/$objectId'));
-  }
+  static ParseDatabase get instance => _instance;
+
+  static ParseClass parseClass(String className) =>
+      _ParseClass(className, _instance);
 
   /// Create a object in [className] class
   Future<Response> create({
@@ -58,5 +38,28 @@ class ParseDatabase extends Service {
       ..remove('updatedAt')
       ..remove('objectId')
       ..remove('createdAt');
+  }
+}
+
+abstract class ParseClass {}
+
+class _ParseClass extends ParseClass {
+  _ParseClass(this.className, this.database);
+  final ParseDatabase database;
+  final String className;
+
+  /// Get a object with a [objectId] from [className]
+  Future<Response> get(String objectId) {
+    return database.client
+        .get(database.client.buildUri(path: '/classes/$className/$objectId'));
+  }
+
+  /// Deletes a object with a [objectId] from [className]
+  Future<dynamic> delete({
+    required String className,
+    required String objectId,
+  }) {
+    return client
+        .delete(client.buildUri(path: '/classes/$className/$objectId'));
   }
 }

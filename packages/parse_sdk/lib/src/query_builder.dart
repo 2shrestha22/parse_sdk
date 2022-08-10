@@ -1,10 +1,8 @@
 import 'dart:convert';
 
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
 import 'package:parse_sdk/src/parse_client.dart';
 
-@Immutable()
 class ParseQuery {
   final String _className;
   final ParseClient _client;

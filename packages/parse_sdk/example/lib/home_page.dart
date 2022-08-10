@@ -21,14 +21,14 @@ class _HomePageState extends State<HomePage> {
   final diskTextEditingController = TextEditingController();
 
   Future<List<PC>> getPCs() async {
-    final res = await ParseDatabase().query('PC').get();
+    final res = await ParseDatabase.instance.query('PC').get();
     return (jsonDecode(res.body)['results'] as List)
         .map((e) => PC.fromJson(e))
         .toList();
   }
 
   Future<List<PC>> queryPCs() async {
-    final res = await ParseDatabase()
+    final res = await ParseDatabase.instance
         .query('PC')
         .where('createdAt', isNotEqualTo: DateTime(2021, 11, 28))
         .where('cpu', isLessThanOrEqualTo: 60, isNotEqualTo: 35)
@@ -100,9 +100,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                   TextButton(
                     onPressed: () {
-                      debugPrint(identical(ParseDatabase(), ParseDatabase())
+                      debugPrint(identical(
+                              ParseDatabase.instance, ParseDatabase.instance)
                           .toString());
-                      ParseDatabase().create(
+                      ParseDatabase.instance.create(
                         className: 'PC',
                         data: {
                           "cpu": int.parse(cpuTextEditingController.text),
@@ -130,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                         .map((e) => PcListItem(
                             pc: e,
                             onDelete: () {
-                              ParseDatabase()
+                              ParseDatabase.instance
                                   .delete(className: 'PC', objectId: e.objectId)
                                   .then((value) {
                                 setState(() {});
@@ -153,7 +154,7 @@ class _HomePageState extends State<HomePage> {
                         .map((e) => PcListItem(
                               pc: e,
                               onDelete: () {
-                                ParseDatabase()
+                                ParseDatabase.instance
                                     .delete(
                                         className: 'PC', objectId: e.objectId)
                                     .then((value) {

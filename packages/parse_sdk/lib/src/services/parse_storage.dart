@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:http/http.dart';
 import 'package:parse_sdk/model/parse_file.dart';
 import 'package:parse_sdk/parse_sdk.dart';
-import 'package:parse_sdk/src/parse_client.dart';
 import 'package:parse_sdk/src/service.dart';
 
 class ParseStorage extends Service {
@@ -29,7 +28,7 @@ class ParseStorage extends Service {
                 (List<int> previous, int element) => previous..add(element)))
         .then((value) {
       final parseFile = ParseFile.fromJson(jsonDecode(value.body));
-      return ParseDatabase().create(
+      return ParseDatabase.instance.create(
         className: 'File',
         data: {
           "name": fileName,
