@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/packages/parse_dart/melos_parse_dart.iml" filepath="$PROJECT_DIR$/packages/parse_dart/melos_parse_dart.iml" />
+      <module fileurl="file://$PROJECT_DIR$/packages/parse_dart/example/melos_parse_dart_example.iml" filepath="$PROJECT_DIR$/packages/parse_dart/example/melos_parse_dart_example.iml" />
       <module fileurl="file://$PROJECT_DIR$/melos_melos.iml" filepath="$PROJECT_DIR$/melos_melos.iml" />
     </modules>
   </component>

@@ -1,0 +1,17 @@
+name: parse_dart_example
+description: A parse_dart example.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: '>=2.18.0 <3.0.0'
+
+
+dev_dependencies:
+  test: ^1.16.0
+  very_good_analysis: ^3.0.1
+
+dependencies: 
+  faker: ^2.0.0
+  parse_dart:
+    path: ../../parse_dart
