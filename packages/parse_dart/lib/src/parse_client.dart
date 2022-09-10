@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:parse_dart/src/parse_options.dart';
@@ -17,6 +18,12 @@ class ParseClient extends http.BaseClient {
 
   static late ParseClient _instance;
 
+  /// Instance of a [ParseClient]
+  ///
+  /// You need to initilize [ParseClient] with
+  /// `ParseClient.init(options)` before using this.
+  static ParseClient get instance => _instance;
+
   /// Initialize [ParseClient] with [ParseOptions] and optional [http.Client]
   static void init(ParseOptions options, [http.Client? client]) {
     _instance = ParseClient._(options, client);
@@ -28,7 +35,6 @@ class ParseClient extends http.BaseClient {
   ///
   /// e.g. `/api/account`
   Uri buildUri({
-    /// Must start with '/'
     required String path,
     String? query,
     Map<String, dynamic>? queryParameters,
@@ -64,6 +70,10 @@ class ParseClient extends http.BaseClient {
       request.headers['X-Parse-REST-API-Key'] = _options.restApiKey!;
     }
 
+    if (_options.debug) {
+      _logRequest(request);
+    }
+
     return _inner!.send(request);
   }
 
@@ -76,9 +86,12 @@ class ParseClient extends http.BaseClient {
     super.close();
   }
 
-  /// Instance of a [ParseClient]
-  ///
-  /// You need to initilize [ParseClient] with
-  /// `ParseClient.init(options)` before using this.
-  static ParseClient get instance => _instance;
+  void _logRequest(http.BaseRequest request) {
+    return log('''
+--------------------------------
+${request.method}: ${request.url.origin}/${request.url.path}
+Headers:\n\t${jsonEncode(request.headers)}
+QueryParams:\n\t${request.url.queryParameters}
+--------------------------------''');
+  }
 }

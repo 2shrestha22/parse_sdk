@@ -8,6 +8,7 @@ class ParseOptions {
     this.masterKey,
     this.clientKey,
     this.restApiKey,
+    this.debug = false,
   }) : assert(
           serverUrl.startsWith(RegExp('http://|https://')),
           "endPoint $serverUrl must start with 'http'",
@@ -30,4 +31,11 @@ class ParseOptions {
 
   /// REST_API_KEY
   final String? restApiKey;
+
+  /// Enable debug mode.
+  ///
+  /// Enabling debug mode logs all request and responses to console.
+  ///
+  /// It is good to not enable debug mode in production app.
+  final bool debug;
 }
