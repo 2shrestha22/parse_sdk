@@ -42,6 +42,21 @@ abstract class Service {
     );
   }
 
+  /// Perform a put request.
+  ///
+  /// [path] must start with `/`
+  ///
+  /// e.g. `/classes/GameScore`, `/users`
+  Future<Response> put({
+    required String path,
+    required Map<String, dynamic> data,
+  }) {
+    return _client.post(
+      _client.buildUri(path: path),
+      body: jsonEncode(_removeGetOnlyFields(data)),
+    );
+  }
+
   /// Removes fields that should not be sent as data because they cant be set
   /// or updated.
   Map<String, dynamic> _removeGetOnlyFields(Map<String, dynamic> data) {
