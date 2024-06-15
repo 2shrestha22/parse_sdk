@@ -9,7 +9,7 @@ environment:
 
 dev_dependencies:
   test: ^1.16.0
-  very_good_analysis: ^3.0.1
+  very_good_analysis: ^5.1.0
 
 dependencies: 
   faker: ^2.0.0
